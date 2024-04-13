@@ -2,6 +2,7 @@ package com.example.ccproj;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -14,6 +15,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -99,10 +103,23 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             // Process the result here
             Log.d(TAG, "Response: " + result);
-            // You can handle the response here, such as showing it in a TextView or navigating to another activity.
-            // For now, let's just log it.
-            Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
+
+            try {
+                JSONObject jsonResponse = new JSONObject(result);
+                if (jsonResponse.has("message") && jsonResponse.getString("message").equals("Login successful")) {
+                    // Navigate to HomePageActivity
+                    Intent intent = new Intent(MainActivity.this, Home.class);
+                    startActivity(intent);
+                    finish(); // Prevent going back to MainActivity when pressing back button from HomePageActivity
+                } else {
+                    Toast.makeText(MainActivity.this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "JSON parsing error: " + e.getMessage());
+                Toast.makeText(MainActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 }
 
