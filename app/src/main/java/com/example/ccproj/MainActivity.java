@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 if (jsonResponse.has("message") && jsonResponse.getString("message").equals("Login successful")) {
                     // Navigate to HomePageActivity
                     Intent intent = new Intent(MainActivity.this, Home.class);
+                    intent.putExtra("user",usernameEditText.getText().toString());
                     startActivity(intent);
                     finish(); // Prevent going back to MainActivity when pressing back button from HomePageActivity
                 } else {
