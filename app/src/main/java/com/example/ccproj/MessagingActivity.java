@@ -3,10 +3,19 @@ package com.example.ccproj;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +40,7 @@ import org.json.JSONObject;
 public class MessagingActivity extends AppCompatActivity {
     EditText et;
     TextView t;
-    private static final String BASE_URL = "http://3.232.107.171:80/";
+    private static final String BASE_URL = "http://54.145.223.218:3000/";
     private RecyclerView recyclerView;
     private MessageAdapter adapter;
 
@@ -90,6 +99,7 @@ public class MessagingActivity extends AppCompatActivity {
                             String message = jsonObject.getString("message");
                             String fromUsername = jsonObject.getString("from_username");
                             String toUsername = jsonObject.getString("to_username");
+                            showNotification(message);
 
                             // Store the message
                             messages[i] = message;
@@ -165,6 +175,44 @@ public class MessagingActivity extends AppCompatActivity {
             });
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+    public void showNotification(String username) {
+        // Create a notification channel (required for Android Oreo and later)
+        String channelId = "channel_id";
+        CharSequence channelName = "Channel Name";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+
+        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create an intent to open a web URL when the notification is clicked
+        String quizUrl = "https://c884-103-81-240-214.ngrok-free.app/take_quiz/2/";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(quizUrl));
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        // Create the notification
+        Notification notification = new Notification.Builder(this, channelId)
+                .setContentTitle("Congratulations On Interview Selection")
+                .setContentText(username)
+                .setSmallIcon(R.drawable.baseline_email_24)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true) // Notification will be removed when clicked
+                .build();
+
+        // Show the notification
+        if (notificationManager != null) {
+            notificationManager.notify(0, notification);
         }
     }
 }

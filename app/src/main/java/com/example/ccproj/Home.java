@@ -100,7 +100,7 @@ public class Home extends AppCompatActivity {
 
         // Create request
         Request request = new Request.Builder()
-                .url("http://3.232.107.171/users")
+                .url("http://54.145.223.218:3000/users")
                 .build();
 
         // Make asynchronous call

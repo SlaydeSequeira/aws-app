@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String response = "";
             try {
-                URL url = new URL("http://3.232.107.171:80/login");
+                URL url = new URL("http://54.145.223.218:3000/login");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
