@@ -203,7 +203,7 @@ public class MessagingActivity extends AppCompatActivity {
 
         // Create the notification
         Notification notification = new Notification.Builder(this, channelId)
-                .setContentTitle("Congratulations On Interview Selection")
+                .setContentTitle("New Message")
                 .setContentText(username)
                 .setSmallIcon(R.drawable.baseline_email_24)
                 .setContentIntent(pendingIntent)
